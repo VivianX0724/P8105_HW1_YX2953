@@ -54,3 +54,71 @@ ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)
 ```{r save-plot, echo=TRUE}
 # Export the scatterplot to the project directory
 ggsave("penguin_scatterplot.png",width = 8,height=6)
+```
+
+
+##Problem 2
+
+
+```{r}
+# Load required package
+library(tidyverse)
+```
+
+
+# Step 1: Create the data frame
+
+```{r}
+set.seed(123) # For reproducibility
+df <- data.frame(
+  random_sample = rnorm(10),                           
+  # Random sample from Normal distribution
+  logical_vector = rnorm(10) > 0,                      
+  # Logical vector (TRUE if greater than 0)
+  character_vector = sample(letters, 10),              
+  # Random character vector
+  factor_vector = factor(sample(c("A", "B", "C"), 10, replace = TRUE)) 
+  # Factor vector with 3 levels
+)
+```
+
+# Step 2: Attempt to take the mean of each variable
+# Using pull() to extract the columns from the dataframe
+
+```{r}
+mean_numeric <- mean(pull(df, random_sample))          
+# work
+mean_logical <- mean(pull(df, logical_vector))         
+# work (TRUE = 1, FALSE = 0)
+mean_character <- mean(pull(df, character_vector))   
+# fail, character vector has no numeric meaning
+mean_factor <- mean(pull(df, factor_vector))         
+# fail, factors are categorical
+```
+
+# Step 3: Coerce logical, character, and factor variables to numeric
+# Apply as.numeric() to logical, character, and factor vectors
+
+```{r}
+df$numeric_logical <- as.numeric(df$logical_vector)    
+# Logical: TRUE -> 1, FALSE -> 0
+df$numeric_character <- as.numeric(df$character_vector) 
+# Coercing characters to numeric (will result in NA)
+df$numeric_factor <- as.numeric(df$factor_vector)     
+# Coercing factors to their underlying integer levels
+```
+
+
+# Step 4: Output to understand what happens
+
+```{r}
+df
+```
+
+Findings:
+**As it is shown in the result, when converted to numeric data type, the mean of the logical vector and factor vector can be calculated.**
+* When converting factors to numeric, as.numeric() first converts the factors to integers.
+* When converting logical variables, TRUE will be converted to 1 and FALSE will be converted to 0.
+* However, when the converting object is character,
+- If the character vector represents numbers, as.numberic() will convert them into numeric values.\
+- If the character vector does not represent numbers, the function will return NA, then the mean fail to be calculated.
