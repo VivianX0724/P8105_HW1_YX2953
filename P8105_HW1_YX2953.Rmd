@@ -5,6 +5,7 @@ date: "2024-09-21"
 output: pdf_document
 ---
 
+##Problem 1
 
 ```{r setup, include=FALSE}
 # Load necessary libraries
@@ -53,4 +54,3 @@ ggplot(penguins, aes(x = bill_length_mm, y = flipper_length_mm, color = species)
 ```{r save-plot, echo=TRUE}
 # Export the scatterplot to the project directory
 ggsave("penguin_scatterplot.png",width = 8,height=6)
-```
